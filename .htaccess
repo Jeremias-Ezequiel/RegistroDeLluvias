@@ -1,3 +1,7 @@
+# Manejo de errores
+ErrorDocument 404 /registroDeLluvias/public/error.html
+
+# Iniciar el motor de reescritura
 RewriteEngine On
 
 # 1. Redirige la solicitud al directorio raíz (/)
@@ -11,5 +15,8 @@ RewriteRule ^$ public/ [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 # Verifica que la ruta solicitada no sea un directorio real (!-d)
 RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteCond %{REQUEST_URI} !^/registroDeLluvias/public/ [NC]
+
 # Redirige todo el resto a public/
 RewriteRule ^(.*)$ public/$1 [L]
