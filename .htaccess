@@ -1,0 +1,15 @@
+RewriteEngine On
+
+# 1. Redirige la solicitud al directorio raíz (/)
+#    Si la solicitud es http://localhost/registroDeLluvias/, esta la redirige internamente a public/
+RewriteRule ^$ public/ [L]
+
+# 2. Las reglas de reescritura para el resto de URLs (Ej: /login, /about)
+#    Si la solicitud no es un archivo o directorio real, redirige a public/index.php
+
+# Verifica que la ruta solicitada no sea un archivo real (!-f) 
+RewriteCond %{REQUEST_FILENAME} !-f
+# Verifica que la ruta solicitada no sea un directorio real (!-d)
+RewriteCond %{REQUEST_FILENAME} !-d
+# Redirige todo el resto a public/
+RewriteRule ^(.*)$ public/$1 [L]
