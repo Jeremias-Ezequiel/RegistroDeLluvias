@@ -23,7 +23,7 @@ SELECT
     MAX(total_lluvia) AS max_lluvia
 FROM (
     -- Subconsulta: Calcula la suma de lluvia para CADA mes
-    SELECT
+    SELECT  
         SUM(cantidad) AS total_lluvia
     FROM
         lluvias

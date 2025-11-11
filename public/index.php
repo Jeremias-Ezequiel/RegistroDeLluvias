@@ -180,7 +180,7 @@ const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "
                     <input type="hidden" name="seccion" value="consultar">
                     <h3><?= $secuenciaDias ?> dias seguidos de lluvia</h3>
                     <label for=" secuenciaDias"></label>
-                    <input type="number" name="secuenciaDias" id="secuenciaDias" required min="1">
+                    <input type="number" name="secuenciaDias" id="secuenciaDias" required min="2">
                     <button type="submit" class="btn btn-primary">Filtrar</button>
                 </form>
 
@@ -193,7 +193,7 @@ const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "
                 <?php
                 } else {
                 ?>
-                    <table class="table table-striped my-3">
+                    <table class="table my-3">
                         <thead>
                             <tr>
                                 <th>Dia</th>
@@ -202,13 +202,22 @@ const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "
                         </thead>
                         <tbody>
                             <?php
-                            foreach ($lluviasFiltro as $lluvia) {
+                            foreach ($lluviasFiltro as $index => $lluvia) {
+
                             ?>
-                                <tr>
+                                <tr class="my-4 table-primary">
                                     <th><?= $lluvia->getFecha() ?></th>
                                     <th><?= $lluvia->getCantidad() ?></th>
                                 </tr>
+                                <?php
+                                if (($index + 1) % $secuenciaDias === 0) {
+                                ?>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
                         <?php
+                                }
                             }
                         }
                         ?>
