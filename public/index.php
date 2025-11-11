@@ -173,6 +173,13 @@ const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "
                         </tbody>
                     </table>
                 </div>
+                <div>
+                    <?php
+                    echo "<pre>";
+                    var_dump($lluviaController->getSecuence());
+                    echo "</pre>";
+                    ?>
+                </div>
             </div>
         <?php endif; ?>
     </main>

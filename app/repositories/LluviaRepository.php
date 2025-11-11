@@ -12,7 +12,7 @@ class LluviaRepository
 
     public function getAll()
     {
-        $query = "SELECT * FROM lluvias ORDER BY fecha DESC;";
+        $query = "SELECT * FROM lluvias ORDER BY fecha ASC;";
 
         $stmt = $this->db->prepare($query);
         $stmt->execute();
@@ -146,5 +146,49 @@ class LluviaRepository
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?? false;
+    }
+
+    public function getSecuenceByNumber($lluvias, $dias)
+    {
+        $registros_con_secuencia = []; // Guardar los resultados
+        $N = count($lluvias);
+        $i = 0;
+
+        while ($i <= $N - 1) {
+
+            $conteo_seguido = 1;
+
+            // Obtenemos la fecha actual
+            $fecha_actual = new DateTime($lluvias[$i]->getFecha());
+
+            // Con este bucle verificamos el dia siguiente en el arreglo
+            for ($j = $i + 1; $j < $N; $j++) {
+
+                // Obtenemos la diferencia de dias para que siempre sumemos 1dia, 2dias, 3dias, etc..
+                $diff_dias = $j - $i;
+
+                $fecha_siguiente_esperada = (clone $fecha_actual)->modify("+$diff_dias day")->format("Y-m-d");
+
+                $fecha_siguiente_real = $lluvias[$j]->getFecha();
+
+                if ($fecha_siguiente_real === $fecha_siguiente_esperada && $conteo_seguido != $dias) {
+                    $conteo_seguido++;
+                } else {
+                    break;
+                }
+            }
+
+            if ($conteo_seguido >= $dias) {
+                for ($k = 0; $k < $conteo_seguido; $k++) {
+                    $registros_con_secuencia[] = $lluvias[$i + $k];
+                }
+                $i += $conteo_seguido;
+            } else {
+                $i += $dias;
+            }
+        }
+
+
+        return $registros_con_secuencia;
     }
 }

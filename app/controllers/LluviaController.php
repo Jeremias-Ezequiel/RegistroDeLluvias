@@ -93,4 +93,10 @@ class LluviasController
             return "Hubo un error en el servidor: " . $e->getMessage();
         }
     }
+
+    function getSecuence()
+    {
+        $lluvias = $this->lluviaRepository->getAll();
+        return $this->lluviaRepository->getSecuenceByNumber($lluvias, 4);
+    }
 }
