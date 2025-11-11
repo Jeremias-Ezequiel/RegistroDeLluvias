@@ -94,9 +94,14 @@ class LluviasController
         }
     }
 
-    function getSecuence()
+    function getSecuence($secuenciaDias)
     {
-        $lluvias = $this->lluviaRepository->getAll();
-        return $this->lluviaRepository->getSecuenceByNumber($lluvias, 4);
+        $lluvias = $this->lluviaRepository->getAllMoreThanZero();
+        $lluviasFiltro = $this->lluviaRepository->getSecuenceByNumber($lluvias, $secuenciaDias);
+        if (count($lluviasFiltro)) {
+            return $lluviasFiltro;
+        } else {
+            return ["status" => "error", "message" => "No hay registros con {$secuenciaDias} dias de lluvias seguidos"];
+        }
     }
 }

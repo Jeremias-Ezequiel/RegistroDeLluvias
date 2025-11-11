@@ -12,12 +12,13 @@ $mensaje = null;
 $resultado = [];
 $seccion = $_GET['seccion'] ?? 'inicio';
 
+$secuenciaDias = $_GET['secuenciaDias'] ?? 2;
+
 if ($accion == "guardar") {
     $mensaje = $lluviaController->guardarLluvia();
 }
 
 if ($accion == "update") {
-
     $mensaje = $lluviaController->updateLluvia($_POST['fecha'], $_POST['cantidad']);
 }
 
@@ -173,13 +174,46 @@ const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "
                         </tbody>
                     </table>
                 </div>
-                <div>
-                    <?php
-                    echo "<pre>";
-                    var_dump($lluviaController->getSecuence());
-                    echo "</pre>";
-                    ?>
-                </div>
+            </div>
+            <div class="row text-center">
+                <form action="" method="get" autocomplete="off">
+                    <input type="hidden" name="seccion" value="consultar">
+                    <h3><?= $secuenciaDias ?> dias seguidos de lluvia</h3>
+                    <label for=" secuenciaDias"></label>
+                    <input type="number" name="secuenciaDias" id="secuenciaDias" required min="1">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </form>
+
+                <?php
+                $lluviasFiltro = $lluviaController->getSecuence($secuenciaDias);
+
+                if (isset($lluviasFiltro['status']) && $lluviasFiltro['status'] === "error") {
+                ?>
+                    <div class="alert alert-danger my-3"><?= $lluviasFiltro['message'] ?></div>
+                <?php
+                } else {
+                ?>
+                    <table class="table table-striped my-3">
+                        <thead>
+                            <tr>
+                                <th>Dia</th>
+                                <th>Cantidad (mm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($lluviasFiltro as $lluvia) {
+                            ?>
+                                <tr>
+                                    <th><?= $lluvia->getFecha() ?></th>
+                                    <th><?= $lluvia->getCantidad() ?></th>
+                                </tr>
+                        <?php
+                            }
+                        }
+                        ?>
+                        </tbody>
+                    </table>
             </div>
         <?php endif; ?>
     </main>

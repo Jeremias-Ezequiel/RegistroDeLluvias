@@ -26,6 +26,22 @@ class LluviaRepository
         return $lluvias;
     }
 
+    public function getAllMoreThanZero()
+    {
+        $query = "SELECT * FROM lluvias WHERE cantidad > 0 ORDER BY fecha ASC;";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+
+        $lluvias = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $lluvias[] = new Lluvia($row);
+        }
+
+        return $lluvias;
+    }
+
     public function findByFecha($fecha)
     {
         $query = "SELECT * FROM lluvias WHERE fecha = :fecha LIMIT 1;";
