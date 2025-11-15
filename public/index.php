@@ -139,7 +139,7 @@ const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "
                         </tbody>
                     </table>
 
-                    <h3>Los meses más lluviosos son:</h3>
+                    <h3><?= count($meses_max) === 1 ?  "El mes más lluvioso es:" : "Los meses más lluviosos son:" ?></h3>
                     <ul class="list-group">
                         <?php
                         foreach ($meses_max as $meses) {
@@ -151,11 +151,12 @@ const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "
                     </ul>
                 </div>
                 <div class="col-md-6">
-                    <h3>Máxima cantidad de lluvia por mes</h3>
+                    <h3>Máxima cantidad de lluvia en un dia</h3>
                     <table class="table table-primary table-striped-columns">
                         <thead>
                             <tr>
                                 <th>Fecha</th>
+                                <th>Mes</th>
                                 <th>Cantidad (mm)</th>
                             </tr>
                         </thead>
@@ -166,6 +167,7 @@ const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "
                             ?>
                                 <tr>
                                     <th><?= $lluvias['dia_lluvioso'] ?></th>
+                                    <th><?= MESES[$lluvias['mes'] - 1] ?></th>
                                     <th><?= $lluvias['cantidad'] ?> </th>
                                 </tr>
                             <?php

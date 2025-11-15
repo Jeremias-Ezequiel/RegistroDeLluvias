@@ -135,6 +135,7 @@ class LluviaRepository
     {
         $query = "SELECT
                 DATE(l1.fecha) AS dia_lluvioso,
+                MONTH(l1.fecha) AS mes,
                 l1.cantidad
                 FROM
                 lluvias l1
