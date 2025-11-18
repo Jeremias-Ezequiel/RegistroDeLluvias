@@ -3,6 +3,29 @@
 date_default_timezone_set("America/Argentina/Buenos_Aires");
 $diaAnterior = date("Y-m-d", strtotime("-1 day"));
 
+// Consumir la API de WeatherAPI
+$pathEnv = __DIR__ . "/../.env";
+$env = parse_ini_file($pathEnv);
+$apiKey = $env['API_KEY'];
+$ciudad = "Buenos_Aires";
+
+$url = "http://api.weatherapi.com/v1/current.json?key={$apiKey}&q={$ciudad}";
+
+$ch = curl_init();
+
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Para que retorne el resultado en una variable
+
+$res = curl_exec($ch);
+
+if (curl_errno($ch)) {
+    echo "Error en CURL: " . curl_error($ch);
+} else {
+    $datos = json_decode($res, true);
+}
+
+curl_close($ch);
+
 // Requerimos el archivo
 require_once "../app/controllers/LluviaController.php";
 $lluviaController = new LluviasController();
@@ -37,7 +60,7 @@ const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/styles.css" rel="stylesheet">
 </head>
 
 <body>
@@ -50,6 +73,12 @@ const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "
     </nav>
 
     <main class="container mt-4">
+        <video class="video-fondo" autoplay muted loop playsinline>
+            <source src="./assets/video/lluvia4.mp4" type="video/mp4">
+        </video>
+
+
+        <div class="background-video"></div>
         <?php if (isset($seccion) && $seccion == "inicio"): ?>
             <h1 class="mb-3">Registro de Lluvias por Mes</h1>
             <div class="row">
@@ -102,6 +131,21 @@ const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "
                             }
                             ?>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card card-time text-center col-12" style="width: 250px;height: 300px">
+                    <img src="<?= $datos['current']['condition']['icon'] ?>" class="img-fluid" width="100px" alt="Icono de tiempo">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= $datos['location']['name'] ?></h5>
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">C°: <?= $datos['current']['temp_c'] ?></li>
+                            <li class="list-group-item">Humedad: <?= $datos['current']['humidity'] ?>%</li>
+                            <li class="list-group-item">Sensación Térmica: <?= $datos['current']['feelslike_c'] ?></li>
+                        </ul>
+
                     </div>
                 </div>
             </div>
